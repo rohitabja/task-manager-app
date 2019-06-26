@@ -1,0 +1,77 @@
+<div class="container" style="margin-top: 100px;">
+  <div class="row"  *ngIf="message">
+    <div class="col-xs-12">
+      <p class="alert alert-success">
+          <strong>{{message}}</strong>
+          <button style="float: right;" (click)="message = null">Clear</button>
+      </p>
+    </div>
+  </div>
+  <div class="row"  *ngIf="errorMessage">
+      <div class="col-xs-12">
+        <p class="alert alert-success">
+            <strong>{{errorMessage}}</strong>
+            <button style="float: right;" (click)="errorMessage = null">Clear</button>
+        </p>
+      </div>
+  </div>
+  <div style="border-bottom-style: solid; border-bottom-color: grey">
+    <div>
+      <label>Task: </label><input [(ngModel)]="searchTaskName" type="text">
+      <label style="margin-left: 10px">Parent Task: </label><input [(ngModel)]="searchParentTaskName" type="text">
+    </div>
+    <div>
+      <label>Priority From: </label><input [(ngModel)]="searchTaskPrirotyFrom" type="number" max="30">
+      <label style="margin-left: 10px">Priority To: </label><input [(ngModel)]="searchTaskPrirotyTo" type="number" max="30">
+    </div>
+    <div>
+      <label>Start Date: </label>
+      <mat-form-field>
+        <input matInput 
+                [matDatepicker]="startDatePicker" 
+                [(ngModel)]="searchStartDate">
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+      </mat-form-field>
+      <label style="margin-left: 15px">End Date: </label>
+      <mat-form-field>
+        <input matInput 
+                [matDatepicker]="endDatePicker" 
+                [(ngModel)]="searchEndDate">
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+  <div style="margin-top: 40px;">
+    <div class="table-wrap">
+      <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Parent</th>
+              <th>Priority</th>
+              <th>Start</th>
+              <th>End</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let task of tasks | searchTask: searchTaskName:searchParentTaskName:searchTaskPrirotyFrom:searchTaskPrirotyTo:searchStartDate:searchEndDate">
+              <td>{{task.name}}</td>
+              <td>{{task.parentTask}}</td>
+              <td>{{task.priority}}</td>
+              <td>{{task.startDate}}</td>
+              <td>{{task.endDate}}</td>
+              <td>
+                <div class="btn-toolbar">
+                  <button class="btn btn-primary" routerLink="/updateTask/{{task.id}}" [disabled]="task.completed">Edit</button>
+                  <button class="btn btn-primary" (click)="endTask(task)" [disabled]="task.completed">End Task</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>
